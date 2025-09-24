@@ -3,5 +3,23 @@
   "description": "A modern agricultural management platform",
   "change_language": "Change language",
   "english": "English",
-  "chinese": "Chinese"
+  "chinese": "Chinese",
+  "login": {
+    "title": "Login",
+    "description": "Login to Agri Leap",
+    "email": "Email",
+    "password": "Password",
+    "forgotPassword": "Forgot password?",
+    "loginButton": "Login",
+    "orContinueWith": "Or continue with",
+    "loginWithApple": "Login with Apple",
+    "loginWithGoogle": "Login with Google",
+    "loginWithMeta": "Login with Meta",
+    "dontHaveAccount": "Don't have an account?",
+    "signUp": "Sign up",
+    "byClickingContinue": "By clicking continue, you agree to our",
+    "termsOfService": "Terms of Service",
+    "and": "and",
+    "privacyPolicy": "Privacy Policy"
+  }
 }

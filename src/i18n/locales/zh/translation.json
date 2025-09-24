@@ -3,5 +3,8 @@
   "description": "一个现代化的农业管理平台",
   "change_language": "切换语言",
   "english": "英语",
-  "chinese": "中文"
+  "chinese": "中文",
+  "login": {
+    "title": "登录"
+  }
 }
