@@ -19,7 +19,7 @@ i18n
   .use(initReactI18next) // 将 i18n 实例传递给 react-i18next
   .init({
     resources,
-    lng: 'en', // 默认语言
+    lng: 'zh', // 默认语言
     fallbackLng: 'en', // 备用语言
     debug: true,
     interpolation: {

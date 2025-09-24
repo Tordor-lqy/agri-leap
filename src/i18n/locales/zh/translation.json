@@ -4,7 +4,20 @@
   "change_language": "切换语言",
   "english": "英语",
   "chinese": "中文",
-  "login": {
-    "title": "登录"
-  }
+  "login.title": "登录",
+  "login.description": "登录到Agri Leap",
+  "login.email": "电子邮件",
+  "login.password": "密码",
+  "login.forgotPassword": "忘记密码？",
+  "login.loginButton": "登录",
+  "login.orContinueWith": "或继续",
+  "login.loginWithApple": "用苹果登录",
+  "login.loginWithGoogle": "使用Google登录",
+  "login.loginWithMeta": "用元登录",
+  "login.dontHaveAccount": "没有帐户？",
+  "login.signUp": "报名",
+  "login.byClickingContinue": "通过单击继续，您同意我们的",
+  "login.termsOfService": "服务条款",
+  "login.and": "和",
+  "login.privacyPolicy": "隐私政策"
 }
