@@ -27,7 +27,7 @@ export function LoginForm({
                 <Input
                   id="email"
                   type="email"
-                  placeholder="m@example.com"
+                  placeholder={t("login.email")}
                   required
                 />
               </div>
@@ -41,7 +41,7 @@ export function LoginForm({
                     {t("login.forgotPassword")}
                   </a>
                 </div>
-                <Input id="password" type="password" required />
+                <Input id="password" placeholder={t("login.password")} type="password" required />
               </div>
               <Button type="submit" className="w-full">
                 {t("login.loginButton")}
@@ -90,7 +90,7 @@ export function LoginForm({
           </form>
           <div className="bg-muted relative hidden md:block">
             <img
-              src="/placeholder.svg"
+              src="/login-bg.png"
               alt="Image"
               className="absolute inset-0 h-full w-full object-cover dark:brightness-[0.2] dark:grayscale"
             />

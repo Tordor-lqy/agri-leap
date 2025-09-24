@@ -9,9 +9,21 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as Home_rootRouteImport } from './routes/home/__root'
+import { Route as HomeRouteImport } from './routes/home'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as LoginIndexRouteImport } from './routes/login/index'
+import { Route as HomeChatIndexRouteImport } from './routes/home/chat/index'
 
+const Home_rootRoute = Home_rootRouteImport.update({
+  id: '/__root',
+  getParentRoute: () => HomeRoute,
+} as any)
+const HomeRoute = HomeRouteImport.update({
+  id: '/home',
+  path: '/home',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
@@ -22,35 +34,62 @@ const LoginIndexRoute = LoginIndexRouteImport.update({
   path: '/login/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const HomeChatIndexRoute = HomeChatIndexRouteImport.update({
+  id: '/chat/',
+  path: '/chat/',
+  getParentRoute: () => HomeRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/home': typeof Home_rootRoute
   '/login': typeof LoginIndexRoute
+  '/home/chat': typeof HomeChatIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/home': typeof Home_rootRoute
   '/login': typeof LoginIndexRoute
+  '/home/chat': typeof HomeChatIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/home': typeof HomeRouteWithChildren
+  '/home/__root': typeof Home_rootRoute
   '/login/': typeof LoginIndexRoute
+  '/home/chat/': typeof HomeChatIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/login'
+  fullPaths: '/' | '/home' | '/login' | '/home/chat'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/login'
-  id: '__root__' | '/' | '/login/'
+  to: '/' | '/home' | '/login' | '/home/chat'
+  id: '__root__' | '/' | '/home' | '/home/__root' | '/login/' | '/home/chat/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  HomeRoute: typeof HomeRouteWithChildren
   LoginIndexRoute: typeof LoginIndexRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/home/__root': {
+      id: '/home/__root'
+      path: ''
+      fullPath: '/home'
+      preLoaderRoute: typeof Home_rootRouteImport
+      parentRoute: typeof HomeRoute
+    }
+    '/home': {
+      id: '/home'
+      path: '/home'
+      fullPath: '/home'
+      preLoaderRoute: typeof HomeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -65,11 +104,31 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LoginIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/home/chat/': {
+      id: '/home/chat/'
+      path: '/chat'
+      fullPath: '/home/chat'
+      preLoaderRoute: typeof HomeChatIndexRouteImport
+      parentRoute: typeof HomeRoute
+    }
   }
 }
 
+interface HomeRouteChildren {
+  Home_rootRoute: typeof Home_rootRoute
+  HomeChatIndexRoute: typeof HomeChatIndexRoute
+}
+
+const HomeRouteChildren: HomeRouteChildren = {
+  Home_rootRoute: Home_rootRoute,
+  HomeChatIndexRoute: HomeChatIndexRoute,
+}
+
+const HomeRouteWithChildren = HomeRoute._addFileChildren(HomeRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  HomeRoute: HomeRouteWithChildren,
   LoginIndexRoute: LoginIndexRoute,
 }
 export const routeTree = rootRouteImport
