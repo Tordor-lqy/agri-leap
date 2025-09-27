@@ -144,9 +144,28 @@ jobs:
     - name: Configure Rust for Android cross-compilation
       run: |
         mkdir -p ~/.cargo
+        # Find the correct NDK toolchain path
+        NDK_TOOLCHAIN_PATH=""
+        for path in "$NDK_HOME/toolchains/llvm/prebuilt/linux-x86_64/bin" "$ANDROID_HOME/ndk-bundle/toolchains/llvm/prebuilt/linux-x86_64/bin" "$ANDROID_SDK_ROOT/ndk-bundle/toolchains/llvm/prebuilt/linux-x86_64/bin"; do
+          if [ -d "$path" ]; then
+            NDK_TOOLCHAIN_PATH="$path"
+            break
+          fi
+        done
+        
+        if [ -z "$NDK_TOOLCHAIN_PATH" ]; then
+          echo "Error: Could not find NDK toolchain path"
+          echo "NDK_HOME: $NDK_HOME"
+          echo "ANDROID_HOME: $ANDROID_HOME"
+          echo "ANDROID_SDK_ROOT: $ANDROID_SDK_ROOT"
+          ls -la $ANDROID_SDK_ROOT/ndk/
+          exit 1
+        fi
+        
+        echo "Using NDK toolchain path: $NDK_TOOLCHAIN_PATH"
         echo "[target.aarch64-linux-android]" >> ~/.cargo/config
-        echo "ar = \"$NDK_HOME/toolchains/llvm/prebuilt/linux-x86_64/bin/aarch64-linux-android-ar\"" >> ~/.cargo/config
-        echo "linker = \"$NDK_HOME/toolchains/llvm/prebuilt/linux-x86_64/bin/aarch64-linux-android-clang\"" >> ~/.cargo/config
+        echo "ar = \"$NDK_TOOLCHAIN_PATH/aarch64-linux-android-ar\"" >> ~/.cargo/config
+        echo "linker = \"$NDK_TOOLCHAIN_PATH/aarch64-linux-android-clang\"" >> ~/.cargo/config
       
     - name: Install Tauri CLI
       run: cargo install tauri-cli --version "^2.0"
