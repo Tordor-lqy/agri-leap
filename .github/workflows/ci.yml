@@ -64,6 +64,9 @@ jobs:
       with:
         workspaces: './src-tauri -> target'
         
+    - name: Install Rust Android target
+      run: rustup target add aarch64-linux-android armv7-linux-androideabi i686-linux-android x86_64-linux-android
+        
     - name: Build Tauri app (debug)
       run: cd src-tauri && cargo build
 

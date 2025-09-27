@@ -13,7 +13,9 @@ jobs:
         platform: [macos-latest, ubuntu-latest, windows-latest]
         
     runs-on: ${{ matrix.platform }}
-    
+    permissions:
+      contents: write
+      
     steps:
     - name: Checkout repository
       uses: actions/checkout@v4
@@ -57,6 +59,9 @@ jobs:
       with:
         workspaces: './src-tauri -> target'
         
+    - name: Install Rust Android target
+      run: rustup target add aarch64-linux-android armv7-linux-androideabi i686-linux-android x86_64-linux-android
+        
     - name: Build frontend
       run: pnpm build
       
@@ -73,7 +78,9 @@ jobs:
 
   android-release:
     runs-on: ubuntu-latest
-    
+    permissions:
+      contents: write
+      
     steps:
     - name: Checkout repository
       uses: actions/checkout@v4
