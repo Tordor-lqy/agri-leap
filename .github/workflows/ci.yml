@@ -140,5 +140,15 @@ jobs:
         echo "NDK_HOME=$ANDROID_SDK_ROOT/ndk/$(ls -1 $ANDROID_SDK_ROOT/ndk | head -n 1)" >> $GITHUB_ENV
         echo "ANDROID_NDK_ROOT=$NDK_HOME" >> $GITHUB_ENV
       
+    - name: Configure Rust for Android cross-compilation
+      run: |
+        mkdir -p ~/.cargo
+        echo "[target.aarch64-linux-android]" >> ~/.cargo/config
+        echo "ar = \"$NDK_HOME/toolchains/llvm/prebuilt/linux-x86_64/bin/aarch64-linux-android-ar\"" >> ~/.cargo/config
+        echo "linker = \"$NDK_HOME/toolchains/llvm/prebuilt/linux-x86_64/bin/aarch64-linux-android-clang\"" >> ~/.cargo/config
+      
+    - name: Install Tauri CLI
+      run: cargo install tauri-cli --version "^2.0"
+      
     - name: Check Tauri Android project setup
       run: cd src-tauri && cargo tauri android init
