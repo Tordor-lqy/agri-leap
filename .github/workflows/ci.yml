@@ -140,6 +140,27 @@ jobs:
         echo "ANDROID_HOME=$ANDROID_SDK_ROOT" >> $GITHUB_ENV
         echo "NDK_HOME=$ANDROID_SDK_ROOT/ndk/$(ls -1 $ANDROID_SDK_ROOT/ndk | head -n 1)" >> $GITHUB_ENV
         echo "ANDROID_NDK_ROOT=$NDK_HOME" >> $GITHUB_ENV
+        echo "ANDROID_NDK_HOME=$NDK_HOME" >> $GITHUB_ENV
+        # List NDK directory contents for debugging
+        echo "NDK directory contents:"
+        ls -la $ANDROID_SDK_ROOT/ndk/
+        echo "Selected NDK version: $(ls -1 $ANDROID_SDK_ROOT/ndk | head -n 1)"
+        echo "Full NDK path: $NDK_HOME"
+        # Check if toolchains directory exists
+        if [ -d "$NDK_HOME/toolchains/llvm/prebuilt/linux-x86_64/bin" ]; then
+          echo "NDK toolchain found at: $NDK_HOME/toolchains/llvm/prebuilt/linux-x86_64/bin"
+          ls -la $NDK_HOME/toolchains/llvm/prebuilt/linux-x86_64/bin/
+        else
+          echo "NDK toolchain not found, checking available directories:"
+          ls -la $NDK_HOME/toolchains/llvm/prebuilt/
+          # Try to find the correct prebuilt directory
+          for dir in $NDK_HOME/toolchains/llvm/prebuilt/*; do
+            if [ -d "$dir/bin" ]; then
+              echo "Found alternative toolchain at: $dir/bin"
+              ls -la $dir/bin/ | grep clang
+            fi
+          done
+        fi
       
     - name: Configure Rust for Android cross-compilation
       run: |
@@ -153,19 +174,41 @@ jobs:
           fi
         done
         
+        # If standard path not found, try to find any prebuilt directory with bin
+        if [ -z "$NDK_TOOLCHAIN_PATH" ]; then
+          echo "Standard paths not found, searching for alternative toolchain paths..."
+          for dir in $NDK_HOME/toolchains/llvm/prebuilt/*; do
+            if [ -d "$dir/bin" ] && [ -f "$dir/bin/aarch64-linux-android-clang" ]; then
+              NDK_TOOLCHAIN_PATH="$dir/bin"
+              echo "Found alternative toolchain at: $NDK_TOOLCHAIN_PATH"
+              break
+            fi
+          done
+        fi
+        
         if [ -z "$NDK_TOOLCHAIN_PATH" ]; then
           echo "Error: Could not find NDK toolchain path"
           echo "NDK_HOME: $NDK_HOME"
           echo "ANDROID_HOME: $ANDROID_HOME"
           echo "ANDROID_SDK_ROOT: $ANDROID_SDK_ROOT"
-          ls -la $ANDROID_SDK_ROOT/ndk/
+          echo "Contents of NDK toolchains directory:"
+          ls -la $NDK_HOME/toolchains/llvm/prebuilt/
           exit 1
         fi
         
         echo "Using NDK toolchain path: $NDK_TOOLCHAIN_PATH"
+        echo "Contents of toolchain bin directory:"
+        ls -la $NDK_TOOLCHAIN_PATH/ | grep -E "(clang|ar)"
+        
         echo "[target.aarch64-linux-android]" >> ~/.cargo/config
         echo "ar = \"$NDK_TOOLCHAIN_PATH/aarch64-linux-android-ar\"" >> ~/.cargo/config
         echo "linker = \"$NDK_TOOLCHAIN_PATH/aarch64-linux-android-clang\"" >> ~/.cargo/config
+        
+        # Also set environment variables that might be used by the build
+        echo "CARGO_TARGET_AARCH64_LINUX_ANDROID_LINKER=$NDK_TOOLCHAIN_PATH/aarch64-linux-android-clang" >> $GITHUB_ENV
+        echo "CARGO_TARGET_AARCH64_LINUX_ANDROID_AR=$NDK_TOOLCHAIN_PATH/aarch64-linux-android-ar" >> $GITHUB_ENV
+        echo "CC_aarch64-linux-android=$NDK_TOOLCHAIN_PATH/aarch64-linux-android-clang" >> $GITHUB_ENV
+        echo "CXX_aarch64-linux-android=$NDK_TOOLCHAIN_PATH/aarch64-linux-android-clang++" >> $GITHUB_ENV
       
     - name: Install Tauri CLI
       run: cargo install tauri-cli --version "^2.0"
