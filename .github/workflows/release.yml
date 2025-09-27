@@ -10,7 +10,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        platform: [macos-latest, ubuntu-latest, windows-latest]
+        platform: [macos-latest, windows-latest]
         
     runs-on: ${{ matrix.platform }}
     permissions:
@@ -149,4 +149,4 @@ jobs:
         releaseBody: 'See the assets to download and install this version.'
         releaseDraft: false
         prerelease: false
-        args: '--target android'
+        args: '--target arm-linux-androideabi'
