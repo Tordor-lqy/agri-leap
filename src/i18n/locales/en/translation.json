@@ -19,5 +19,8 @@
     "login.byClickingContinue": "By clicking continue, you agree to our",
     "login.termsOfService": "Terms of Service",
     "login.and": "and",
-    "login.privacyPolicy": "Privacy Policy"
+    "login.privacyPolicy": "Privacy Policy",
+    "settings.title": "Settings",
+    "settings.description": "Manage your account settings",
+    "settings.placeholder": "Search your settings"
 }
