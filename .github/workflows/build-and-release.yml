@@ -164,7 +164,7 @@ jobs:
         releaseBody: 'See the assets to download and install this version.'
         releaseDraft: true
         prerelease: false
-        args: '--target android'
+        args: '--target aarch64-linux-android'
         
     - name: Upload Android artifacts
       uses: actions/upload-artifact@v4
