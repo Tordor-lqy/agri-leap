@@ -21,5 +21,6 @@
   "login.and": "和",
   "login.privacyPolicy": "隐私政策",
   "settings.title": "设置",
-  "settings.description": "管理您的账户设置"
+  "settings.description": "管理您的账户设置",
+  "settings.placeholder": "搜索您的设置"
 }

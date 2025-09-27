@@ -1,14 +1,9 @@
-import { MessageCircle, Users, Phone, Settings } from "lucide-react";
+import { MessageCircle, Users, Phone } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
-import {
-  Dialog,
-  DialogContent,
-  DialogTitle,
-  DialogDescription,
-  DialogTrigger,
-} from "@/components/ui/dialog";
+
 import { useTranslation } from "react-i18next";
+import Setting from "./tool/setting";
 
 function ToolSidebar() {
   const { t } = useTranslation();
@@ -29,20 +24,7 @@ function ToolSidebar() {
 
         <div className="flex-1"></div>
 
-        <Dialog>
-          <DialogTrigger asChild>
-            <Button variant="ghost" size="icon" className="w-10 h-10  ">
-              <Settings className="w-5 h-5" />
-            </Button>
-          </DialogTrigger>
-
-          <DialogContent showCloseButton={false}>
-            <DialogTitle>{t("settings.title")}</DialogTitle>
-            <DialogDescription>
-              {t("settings.description")}
-            </DialogDescription>
-          </DialogContent>
-        </Dialog>
+        <Setting />
 
         <Avatar className="w-10 h-10">
           <AvatarImage src="/api/placeholder/40/40" />

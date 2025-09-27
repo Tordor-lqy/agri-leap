@@ -21,5 +21,6 @@
     "login.and": "and",
     "login.privacyPolicy": "Privacy Policy",
     "settings.title": "Settings",
-    "settings.description": "Manage your account settings"
+    "settings.description": "Manage your account settings",
+    "settings.placeholder": "Search your settings"
 }
