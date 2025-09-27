@@ -31,6 +31,9 @@ jobs:
         version: 9
         run_install: false
         
+    - name: Verify pnpm installation
+      run: pnpm --version
+      
     - name: Get pnpm store directory
       id: pnpm-cache
       shell: bash
@@ -97,6 +100,9 @@ jobs:
         version: 9
         run_install: false
         
+    - name: Verify pnpm installation
+      run: pnpm --version
+      
     - name: Get pnpm store directory
       id: pnpm-cache
       shell: bash
