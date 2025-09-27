@@ -11,7 +11,15 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        platform: [macos-latest, windows-latest]
+        include:
+          - platform: macos-latest
+            arch: universal
+          - platform: macos-latest
+            arch: aarch64
+          - platform: macos-latest
+            arch: x86_64
+          - platform: windows-latest
+            arch: x64
         
     runs-on: ${{ matrix.platform }}
     permissions:
@@ -60,8 +68,13 @@ jobs:
       with:
         workspaces: './src-tauri -> target'
         
-    - name: Install Rust Android target
-      run: rustup target add aarch64-linux-android armv7-linux-androideabi i686-linux-android x86_64-linux-android
+    - name: Install Rust targets
+      run: |
+        if [ "${{ matrix.platform }}" = "macos-latest" ]; then
+          rustup target add aarch64-apple-darwin x86_64-apple-darwin
+        else
+          rustup target add x86_64-pc-windows-msvc
+        fi
         
     - name: Build frontend
       run: pnpm build
@@ -76,14 +89,15 @@ jobs:
         releaseBody: 'See the assets to download and install this version.'
         releaseDraft: true
         prerelease: false
+        args: --target ${{ matrix.arch == 'universal' && 'universal-apple-darwin' || (matrix.arch == 'aarch64' && 'aarch64-apple-darwin' || (matrix.arch == 'x86_64' && 'x86_64-apple-darwin' || 'x86_64-pc-windows-msvc')) }}
         
     - name: Upload artifacts
       uses: actions/upload-artifact@v4
       with:
-        name: ${{ matrix.platform }}-artifacts
+        name: ${{ matrix.platform }}-${{ matrix.arch }}-artifacts
         path: |
+          src-tauri/target/${{ matrix.arch == 'universal' && 'universal-apple-darwin' || (matrix.arch == 'aarch64' && 'aarch64-apple-darwin' || (matrix.arch == 'x86_64' && 'x86_64-apple-darwin' || 'x86_64-pc-windows-msvc')) }}/release/bundle/
           src-tauri/target/release/bundle/
-          src-tauri/target/universal-apple-darwin/release/bundle/
 
   android-build-and-release:
     runs-on: ubuntu-latest
