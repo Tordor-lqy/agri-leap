@@ -68,6 +68,7 @@ jobs:
         workspaces: './src-tauri -> target'
         
     - name: Install Rust targets
+      shell: bash
       run: |
         if [ "${{ matrix.platform }}" = "macos-latest" ]; then
           rustup target add aarch64-apple-darwin x86_64-apple-darwin

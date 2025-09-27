@@ -73,6 +73,7 @@ jobs:
         workspaces: './src-tauri -> target'
         
     - name: Install Rust targets
+      shell: bash
       run: |
         if [ "${{ matrix.platform }}" = "macos-latest" ]; then
           rustup target add aarch64-apple-darwin x86_64-apple-darwin
@@ -81,6 +82,7 @@ jobs:
         fi
         
     - name: Build Tauri app (debug)
+      shell: bash
       run: cd src-tauri && cargo build --target ${{ matrix.arch == 'universal' && 'universal-apple-darwin' || (matrix.arch == 'aarch64' && 'aarch64-apple-darwin' || (matrix.arch == 'x86_64' && 'x86_64-apple-darwin' || 'x86_64-pc-windows-msvc')) }}
 
   android-test:
