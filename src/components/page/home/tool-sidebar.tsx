@@ -2,11 +2,9 @@ import { MessageCircle, Users, Phone } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 
-import { useTranslation } from "react-i18next";
 import Setting from "./tool/setting";
 
 function ToolSidebar() {
-  const { t } = useTranslation();
   return (
     <div className="border-r border-primary-foreground/50 w-0 chat-md:w-16 overflow-hidden transition-all duration-300">
       <div className="flex flex-col items-center py-4 space-y-4 h-full">
