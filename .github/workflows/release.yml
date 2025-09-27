@@ -12,8 +12,6 @@ jobs:
       matrix:
         include:
           - platform: macos-latest
-            arch: universal
-          - platform: macos-latest
             arch: aarch64
           - platform: macos-latest
             arch: x86_64
@@ -89,7 +87,7 @@ jobs:
         releaseBody: 'See the assets to download and install this version.'
         releaseDraft: false
         prerelease: false
-        args: --target ${{ matrix.arch == 'universal' && 'universal-apple-darwin' || (matrix.arch == 'aarch64' && 'aarch64-apple-darwin' || (matrix.arch == 'x86_64' && 'x86_64-apple-darwin' || 'x86_64-pc-windows-msvc')) }}
+        args: --target ${{ matrix.arch == 'aarch64' && 'aarch64-apple-darwin' || (matrix.arch == 'x86_64' && 'x86_64-apple-darwin' || 'x86_64-pc-windows-msvc') }}
 
   android-release:
     runs-on: ubuntu-latest
