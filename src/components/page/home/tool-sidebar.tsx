@@ -1,16 +1,11 @@
-import {
-  MessageCircle,
-  Users,
-  Phone,
-  Settings,
-} from "lucide-react";
+import { MessageCircle, Users, Phone, Settings } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 
-
 function ToolSidebar() {
   return (
-      <div className="w-16  flex flex-col items-center py-4 space-y-4 border-r">
+    <div className="border-r border-primary-foreground/50 w-0 chat-md:w-16 overflow-hidden transition-all duration-300">
+      <div className="flex flex-col items-center py-4 space-y-4 h-full">
         <div className="w-10 h-10 rounded-lg flex items-center justify-center">
           <MessageCircle className="w-6 h-6 " />
         </div>
@@ -34,6 +29,7 @@ function ToolSidebar() {
           <AvatarFallback>我</AvatarFallback>
         </Avatar>
       </div>
+    </div>
   );
 }
 

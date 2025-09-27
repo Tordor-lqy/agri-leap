@@ -6,13 +6,14 @@ import {
   Smile,
   Paperclip,
   Mic,
-  MoreVertical,
-  Circle,
+  MoreVertical
 } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import Chatbox from "./chat-box";
+import ContactBox from "./contact-box";
 
 const WeChatInterface = () => {
   const [selectedChat, setSelectedChat] = useState(0);
@@ -56,6 +57,60 @@ const WeChatInterface = () => {
       unread: 0,
       online: false,
     },
+    {
+      id: 5,
+      name: "赵小刚",
+      avatar: "/api/placeholder/40/40",
+      lastMessage: "项目进度如何了？",
+      time: "11:15",
+      unread: 3,
+      online: true,
+    },
+    {
+      id: 6,
+      name: "钱小红",
+      avatar: "/api/placeholder/40/40",
+      lastMessage: "记得取快递哦",
+      time: "10:40",
+      unread: 0,
+      online: false,
+    },
+    {
+      id: 7,
+      name: "孙小美",
+      avatar: "/api/placeholder/40/40",
+      lastMessage: "晚上一起吃饭吧",
+      time: "09:25",
+      unread: 1,
+      online: true,
+    },
+    {
+      id: 8,
+      name: "周大勇",
+      avatar: "/api/placeholder/40/40",
+      lastMessage: "周末加班安排好了",
+      time: "昨天",
+      unread: 2,
+      online: true,
+    },
+    {
+      id: 9,
+      name: "吴小莉",
+      avatar: "/api/placeholder/40/40",
+      lastMessage: "收到新文件了吗？",
+      time: "前天",
+      unread: 0,
+      online: false,
+    },
+    {
+      id: 10,
+      name: "郑小康",
+      avatar: "/api/placeholder/40/40",
+      lastMessage: "这个方案不错",
+      time: "上周五",
+      unread: 1,
+      online: true,
+    },
   ];
 
   // 模拟聊天消息数据
@@ -98,62 +153,36 @@ const WeChatInterface = () => {
 
   return (
     <>
-      {/* 中间联系人列表 */}
-      <div className="w-80  border-r  flex flex-col">
-        {/* 搜索栏 */}
-        <div className="p-4 border-b ">
-          <div className="relative">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 " />
-            <Input placeholder="搜索联系人或聊天记录" className="pl-10 " />
-          </div>
-        </div>
-
-        {/* 联系人列表 */}
-        <ScrollArea className="flex-1">
-          {contacts.map((contact, index) => (
-            <div
-              key={contact.id}
-              className={`p-4  cursor-pointer border-b  ${
-                selectedChat === index ? " border-l-4 " : ""
-              }`}
-              onClick={() => setSelectedChat(index)}
-            >
-              <div className="flex items-center space-x-3">
-                <div className="relative">
-                  <Avatar className="w-12 h-12">
-                    <AvatarImage src={contact.avatar} />
-                    <AvatarFallback>{contact.name[0]}</AvatarFallback>
-                  </Avatar>
-                  {contact.online && (
-                    <Circle className="absolute -bottom-1 -right-1 w-4 h-4  fill-current" />
-                  )}
-                </div>
-
-                <div className="flex-1 min-w-0">
-                  <div className="flex items-center justify-between">
-                    <h3 className="font-medium  truncate">{contact.name}</h3>
-                    <span className="text-xs ">{contact.time}</span>
-                  </div>
-
-                  <div className="flex items-center justify-between mt-1">
-                    <p className="text-sm  truncate">{contact.lastMessage}</p>
-                    {contact.unread > 0 && (
-                      <span className="  text-xs rounded-full px-2 py-1 min-w-[20px] text-center">
-                        {contact.unread}
-                      </span>
-                    )}
-                  </div>
-                </div>
-              </div>
+      <div className="w-0 md:w-80 border-r border-primary-foreground/50 overflow-hidden transition-all duration-300">
+        {/* 中间联系人列表 */}
+        <div className="flex flex-col">
+          {/* 搜索栏 */}
+          <div className="p-4 border-b border-primary-foreground/50 h-16">
+            <div className="relative">
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 " />
+              <Input placeholder="搜索联系人或聊天记录" className="pl-10" />
             </div>
-          ))}
-        </ScrollArea>
+          </div>
+
+          {/* 联系人列表 */}
+          <ScrollArea className="flex-1 overflow-y-scroll max-h-[calc(100vh-4rem)]">
+            {contacts.map((contact, index) => (
+              <ContactBox
+                key={contact.id.toString()}
+                contact={contact}
+                index={index}
+                selectedChat={selectedChat}
+                setSelectedChat={setSelectedChat}
+              />
+            ))}
+          </ScrollArea>
+        </div>
       </div>
 
       {/* 右侧聊天区域 */}
-      <div className="flex-1 flex flex-col">
+      <div className="flex-1 flex flex-col min-w-[300px] md:min-w-[400px]">
         {/* 聊天头部 */}
-        <div className=" border-b  px-6 py-4 flex items-center justify-between">
+        <div className="border-b border-primary-foreground/50  px-6 py-4 flex items-center justify-between h-16">
           <div className="flex items-center space-x-3">
             <Avatar className="w-10 h-10">
               <AvatarImage src={contacts[selectedChat]?.avatar} />
@@ -201,13 +230,16 @@ const WeChatInterface = () => {
                     </Avatar>
                   )}
 
-                  <div
+                  {/* <div
                     className={`rounded-lg px-4 py-2 ${
-                      msg.sender === "me" ? "0 " : " border "
+                      msg.sender === "me"
+                        ? "0 "
+                        : "border border-primary-foreground/50"
                     }`}
                   >
                     <p className="text-sm">{msg.content}</p>
-                  </div>
+                  </div> */}
+                  <Chatbox msg={msg} />
                 </div>
               </div>
             ))}
@@ -215,7 +247,7 @@ const WeChatInterface = () => {
         </ScrollArea>
 
         {/* 输入区域 */}
-        <div className=" border-t  p-4">
+        <div className=" border-t border-primary-foreground/50 p-4">
           <div className="flex items-center space-x-2 mb-3">
             <Button variant="ghost" size="icon">
               <Smile className="w-5 h-5" />
