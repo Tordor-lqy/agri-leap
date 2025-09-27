@@ -151,23 +151,24 @@ jobs:
     - name: Setup NDK
       run: |
         echo "ANDROID_HOME=$ANDROID_SDK_ROOT" >> $GITHUB_ENV
-        echo "NDK_HOME=$ANDROID_SDK_ROOT/ndk/$(ls -1 $ANDROID_SDK_ROOT/ndk | head -n 1)" >> $GITHUB_ENV
-        echo "ANDROID_NDK_ROOT=$NDK_HOME" >> $GITHUB_ENV
-        echo "ANDROID_NDK_HOME=$NDK_HOME" >> $GITHUB_ENV
+        NDK_VERSION=$(ls -1 $ANDROID_SDK_ROOT/ndk | head -n 1)
+        echo "NDK_HOME=$ANDROID_SDK_ROOT/ndk/$NDK_VERSION" >> $GITHUB_ENV
+        echo "ANDROID_NDK_ROOT=$ANDROID_SDK_ROOT/ndk/$NDK_VERSION" >> $GITHUB_ENV
+        echo "ANDROID_NDK_HOME=$ANDROID_SDK_ROOT/ndk/$NDK_VERSION" >> $GITHUB_ENV
         # List NDK directory contents for debugging
         echo "NDK directory contents:"
         ls -la $ANDROID_SDK_ROOT/ndk/
-        echo "Selected NDK version: $(ls -1 $ANDROID_SDK_ROOT/ndk | head -n 1)"
-        echo "Full NDK path: $NDK_HOME"
+        echo "Selected NDK version: $NDK_VERSION"
+        echo "Full NDK path: $ANDROID_SDK_ROOT/ndk/$NDK_VERSION"
         # Check if toolchains directory exists
-        if [ -d "$NDK_HOME/toolchains/llvm/prebuilt/linux-x86_64/bin" ]; then
-          echo "NDK toolchain found at: $NDK_HOME/toolchains/llvm/prebuilt/linux-x86_64/bin"
-          ls -la $NDK_HOME/toolchains/llvm/prebuilt/linux-x86_64/bin/
+        if [ -d "$ANDROID_SDK_ROOT/ndk/$NDK_VERSION/toolchains/llvm/prebuilt/linux-x86_64/bin" ]; then
+          echo "NDK toolchain found at: $ANDROID_SDK_ROOT/ndk/$NDK_VERSION/toolchains/llvm/prebuilt/linux-x86_64/bin"
+          ls -la $ANDROID_SDK_ROOT/ndk/$NDK_VERSION/toolchains/llvm/prebuilt/linux-x86_64/bin/
         else
           echo "NDK toolchain not found, checking available directories:"
-          ls -la $NDK_HOME/toolchains/llvm/prebuilt/
+          ls -la $ANDROID_SDK_ROOT/ndk/$NDK_VERSION/toolchains/llvm/prebuilt/
           # Try to find the correct prebuilt directory
-          for dir in $NDK_HOME/toolchains/llvm/prebuilt/*; do
+          for dir in $ANDROID_SDK_ROOT/ndk/$NDK_VERSION/toolchains/llvm/prebuilt/*; do
             if [ -d "$dir/bin" ]; then
               echo "Found alternative toolchain at: $dir/bin"
               ls -la $dir/bin/ | grep clang
