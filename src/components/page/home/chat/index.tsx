@@ -3,7 +3,6 @@ import {
   Phone,
   Search,
   Send,
-  Smile,
   Paperclip,
   Mic,
   MoreVertical,
@@ -14,6 +13,7 @@ import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import Chatbox from "./chat-box";
 import ContactBox from "./contact-box";
+import EmojiInputPopover from "./emoji-input-popover";
 
 const WeChatInterface = () => {
   const [selectedChat, setSelectedChat] = useState(0);
@@ -239,9 +239,10 @@ const WeChatInterface = () => {
         {/* 输入区域 */}
         <div className=" border-t border-primary-foreground/50 p-4">
           <div className="flex items-center space-x-2 mb-3">
-            <Button variant="ghost" size="icon">
+            {/* <Button variant="ghost" size="icon">
               <Smile className="w-5 h-5" />
-            </Button>
+            </Button> */}
+            <EmojiInputPopover onEmojiSelect={(emoji) => setMessage(message + emoji)} />
             <Button variant="ghost" size="icon">
               <Paperclip className="w-5 h-5" />
             </Button>
