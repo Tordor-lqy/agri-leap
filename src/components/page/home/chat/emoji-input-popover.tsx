@@ -6,6 +6,7 @@ import {
   PopoverContent,
 } from "@/components/ui/popover";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Button } from "@/components/ui/button";
 
 interface EmojiInputPopoverProps {
   onEmojiSelect?: (emoji: string) => void;
@@ -191,8 +192,10 @@ const EmojiInputPopover: React.FC<EmojiInputPopoverProps> = ({
   return (
     <div className={className}>
       <Popover open={isOpen} onOpenChange={setIsOpen}>
-        <PopoverTrigger>
-          <Smile className="h-4 w-4" />
+        <PopoverTrigger asChild>
+          <Button variant="ghost" size="icon">
+            <Smile className="h-5 w-5" />
+          </Button>
         </PopoverTrigger>
         <PopoverContent>
           <div className="space-y-4">
@@ -214,7 +217,7 @@ const EmojiInputPopover: React.FC<EmojiInputPopoverProps> = ({
                 <button
                   key={`${emoji}-${index}`}
                   onClick={() => handleEmojiClick(emoji)}
-                  className="w-8 h-8 flex items-center justify-center text-xl hover:bg-primary text-primary-foreground rounded transition-colors"
+                  className="w-8 h-8 flex items-center justify-center text-xl hover:bg-primary/50a text-primary-foreground rounded transition-colors"
                   title={emoji}
                 >
                   {emoji}
