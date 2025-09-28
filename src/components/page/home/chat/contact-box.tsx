@@ -34,7 +34,7 @@ const ContactSelectBox: React.FC<ContactBoxProps> = ({
   return (
     <div
       key={contact.id}
-      className={`cursor-pointer border-b border-primary-foreground/50 transition-colors duration-200`}
+      className={`cursor-pointer border-b border-primary-foreground/10 transition-colors duration-200`}
       onClick={() => setSelectedChat(index)}
     >
       <div

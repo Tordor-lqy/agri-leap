@@ -47,7 +47,7 @@ function Chatbox({ msg }: { msg: { sender: string; content: string , time: strin
     <div className="">
       <ContextMenu>
         <ContextMenuTrigger>
-          <div className="relative">
+          <div className="relative select-auto">
             <div
               className={`rounded-lg px-4 py-2 cursor-pointer ${
                 msg.sender === "me"
@@ -57,7 +57,7 @@ function Chatbox({ msg }: { msg: { sender: string; content: string , time: strin
               ref={hoverRef}
               onDoubleClick={() => copyToClipboard(msg.content)}
             >
-              <p className="text-sm">{msg.content}</p>
+              <p className="text-sm selection:bg-primary selection:text-primary-foreground">{msg.content}</p>
             </div>
             {isHovered && (
               <div className="absolute -bottom-6 right-2">

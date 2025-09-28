@@ -13,6 +13,7 @@ import { Route as Home_rootRouteImport } from './routes/home/__root'
 import { Route as HomeRouteImport } from './routes/home'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as LoginIndexRouteImport } from './routes/login/index'
+import { Route as HomeDocsIndexRouteImport } from './routes/home/docs/index'
 import { Route as HomeChatIndexRouteImport } from './routes/home/chat/index'
 
 const Home_rootRoute = Home_rootRouteImport.update({
@@ -34,6 +35,11 @@ const LoginIndexRoute = LoginIndexRouteImport.update({
   path: '/login/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const HomeDocsIndexRoute = HomeDocsIndexRouteImport.update({
+  id: '/docs/',
+  path: '/docs/',
+  getParentRoute: () => HomeRoute,
+} as any)
 const HomeChatIndexRoute = HomeChatIndexRouteImport.update({
   id: '/chat/',
   path: '/chat/',
@@ -45,12 +51,14 @@ export interface FileRoutesByFullPath {
   '/home': typeof Home_rootRoute
   '/login': typeof LoginIndexRoute
   '/home/chat': typeof HomeChatIndexRoute
+  '/home/docs': typeof HomeDocsIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/home': typeof Home_rootRoute
   '/login': typeof LoginIndexRoute
   '/home/chat': typeof HomeChatIndexRoute
+  '/home/docs': typeof HomeDocsIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -59,13 +67,21 @@ export interface FileRoutesById {
   '/home/__root': typeof Home_rootRoute
   '/login/': typeof LoginIndexRoute
   '/home/chat/': typeof HomeChatIndexRoute
+  '/home/docs/': typeof HomeDocsIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/home' | '/login' | '/home/chat'
+  fullPaths: '/' | '/home' | '/login' | '/home/chat' | '/home/docs'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/home' | '/login' | '/home/chat'
-  id: '__root__' | '/' | '/home' | '/home/__root' | '/login/' | '/home/chat/'
+  to: '/' | '/home' | '/login' | '/home/chat' | '/home/docs'
+  id:
+    | '__root__'
+    | '/'
+    | '/home'
+    | '/home/__root'
+    | '/login/'
+    | '/home/chat/'
+    | '/home/docs/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -104,6 +120,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LoginIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/home/docs/': {
+      id: '/home/docs/'
+      path: '/docs'
+      fullPath: '/home/docs'
+      preLoaderRoute: typeof HomeDocsIndexRouteImport
+      parentRoute: typeof HomeRoute
+    }
     '/home/chat/': {
       id: '/home/chat/'
       path: '/chat'
@@ -117,11 +140,13 @@ declare module '@tanstack/react-router' {
 interface HomeRouteChildren {
   Home_rootRoute: typeof Home_rootRoute
   HomeChatIndexRoute: typeof HomeChatIndexRoute
+  HomeDocsIndexRoute: typeof HomeDocsIndexRoute
 }
 
 const HomeRouteChildren: HomeRouteChildren = {
   Home_rootRoute: Home_rootRoute,
   HomeChatIndexRoute: HomeChatIndexRoute,
+  HomeDocsIndexRoute: HomeDocsIndexRoute,
 }
 
 const HomeRouteWithChildren = HomeRoute._addFileChildren(HomeRouteChildren)
