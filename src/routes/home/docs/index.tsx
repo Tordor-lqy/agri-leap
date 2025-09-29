@@ -1,3 +1,4 @@
+import FileManagerPage from '@/components/page/home/docs'
 import { createFileRoute } from '@tanstack/react-router'
 
 export const Route = createFileRoute('/home/docs/')({
@@ -5,5 +6,5 @@ export const Route = createFileRoute('/home/docs/')({
 })
 
 function RouteComponent() {
-  return <div>Hello "/home/docs/"!</div>
+  return <FileManagerPage /> 
 }
