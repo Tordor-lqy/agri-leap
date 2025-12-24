@@ -1,0 +1,85 @@
+name: publish-android-apk
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - release
+
+jobs:
+  android-apk:
+    name: Build Android APK
+    runs-on: ubuntu-22.04
+
+    permissions:
+      contents: write
+
+    steps:
+      # 1️⃣ 拉代码
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # 2️⃣ 安装系统依赖（tauri + android）
+      - name: Install system dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            libwebkit2gtk-4.1-dev \
+            libappindicator3-dev \
+            librsvg2-dev \
+            patchelf \
+            unzip
+
+      # 3️⃣ Node.js
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: lts/*
+          cache: yarn
+
+      # 4️⃣ Java 17（Android & Gradle 必需）
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
+
+      # 5️⃣ Android SDK / NDK
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v3
+
+      # 6️⃣ Rust（stable）
+      - name: Install Rust stable
+        uses: dtolnay/rust-toolchain@stable
+
+      # 7️⃣ Rust Android targets
+      - name: Install Rust Android targets
+        run: |
+          rustup target add \
+            aarch64-linux-android \
+            armv7-linux-androideabi \
+            i686-linux-android \
+            x86_64-linux-android
+
+      # 8️⃣ Rust 缓存
+      - name: Rust cache
+        uses: swatinem/rust-cache@v2
+        with:
+          workspaces: ./src-tauri -> target
+
+      # 9️⃣ 前端依赖
+      - name: Install frontend dependencies
+        run: yarn install --frozen-lockfile
+
+      # 🔟 构建 Android APK（Debug + Release）
+      - name: Build Android APK
+        uses: tauri-apps/tauri-action@v0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tagName: app-v__VERSION__
+          releaseName: 'App v__VERSION__'
+          releaseBody: 'Android APK build'
+          releaseDraft: true
+          prerelease: false
+          args: '--android'
